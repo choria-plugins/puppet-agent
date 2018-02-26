@@ -19,3 +19,10 @@ task :test do
 end
 
 task :default => :test
+
+desc "Builds the release package"
+task :build do
+  cp "README.md", "puppet"
+  cp "CHANGELOG.md", "puppet"
+  sh "/opt/puppetlabs/puppet/bin/mco plugin package --format aiomodulepackage --vendor choria"
+end
