@@ -1,9 +1,9 @@
 metadata    :name        => "puppet",
             :description => "Information about Puppet agent state",
             :author      => "R.I.Pienaar <rip@devco.net>",
-            :license     => "ASL 2.0",
-            :version     => "1.1",
-            :url         => "http://puppetlabs.com/",
+            :license     => "Apache-2.0",
+            :version     => "1.13.2",
+            :url         => "https://github.com/choria-plugins/puppet-agent",
             :timeout     => 1
 
 usage <<-EOU
