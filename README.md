@@ -1,6 +1,6 @@
 # Choria Puppet Agent
 
-This agent manages the *puppet agent* life cycle.
+This agent manages the *puppet agent* life cycle and has the following features:
 
   * Supports noop runs or no-noop runs
   * Supports limiting runs to certain tags
@@ -12,45 +12,61 @@ This agent manages the *puppet agent* life cycle.
   * Use the new validation plugins to provider richer input validation and better errors
   * Data sources for the current puppet agent status and the status of the most recent run
 
+Additionally a number of Playbooks are included:
+
+  * `mcollective_agent_puppet::disable` Disables the Puppet Agent
+  * `mcollective_agent_puppet::disable_and_wait` Disables the Puppet Agent and wait for in-progress catalog runs to complete
+  * `mcollective_agent_puppet::enable` Enables the Puppet Agent
+
+You can use these from other [Choria Playbooks](https://choria.io/docs/playbooks/) or on the CLI,
+
 ## Agent Installation
 
-This agent is installed by default as part of the [Choria Orchestrator](https://choria.io)
+This agent is installed by default as part of the [Choria Orchestrator](https://choria.io).
 
 ## Configuring the agent
 
-By default it just works but there are a few settings you can tweak in *server.cfg*:
+By default it just works if you run `puppet-agent` from Puppet Inc. There are a few settings you can tweak
+using Hiera:
 
-    plugin.puppet.command = puppet agent
-    plugin.puppet.splay = true
-    plugin.puppet.splaylimit = 30
-    # plugin.puppet.config leaves it to Puppet's default location
-    plugin.puppet.windows_service = puppet
-    plugin.puppet.signal_daemon = true
+```yaml
+mcollective_agent_puppet::config:
+  command: "puppet agent"
+  splay: true
+  splaylimit: 30
+  windows_service: puppet
+  signal_daemon: true
+```
 
 These are the defaults, adjust to taste.
 
-If `plugin.puppet.command` is not set, it will try to find `puppet` via the PATH
-environment variable. On non-Windows systems, `/opt/puppetlabs/bin` will be appended
+If `command` is not set, it will try to find `puppet` via the PATH environment variable.
+On non-Windows systems, `/opt/puppetlabs/bin` will be appended
 to PATH if the `command` doesn't include a file path.
 
 > **Warning**: If Puppet is not on the PATH and you are not using the `puppet-agent`
 package provided by Puppet, this can result in running a binary placed by any user that
-has write access to `/opt`. If that is a concern, ensure `plugin.puppet.command` is configured.
+has write access to `/opt`. If that is a concern, ensure `command` is configured.
 
 The agent allows managing of any resource via the Puppet RAL. By default it refuses to
 manage a resource also managed by Puppet which could create conflicting state. If you
 do wish to allow any resources to be managed set this to true:
 
-    plugin.puppet.resource_allow_managed_resources = true
+```yaml
+mcollective_agent_puppet::config:
+  resource_allow_managed_resources = true
+```
 
 The resource action can manage any resource type Puppet can, by default we blacklist
 the all types due to the potential damage this feature can do to your system if not
 correctly setup.  You can specify either a whitelist or a blacklist of types this
 agent will be able to manage - you cannot specify both a blacklist and a whitelist.
 
-    plugin.puppet.resource_type_whitelist = host,alias
-    plugin.puppet.resource_type_blacklist = exec
-
+```yaml
+mcollective_agent_puppet::config:
+  resource_type_whitelist = host,alias
+  resource_type_blacklist = exec
+```
 If you supply the value *none* to *type_whitelist* it will have the effect of denying
 all resource management - this is the default.
 
@@ -59,9 +75,12 @@ service is running. The service name varies between Puppet open source and
 Puppet Enterprise (puppet vs. pe-puppet); the default is puppet, but it can be
 explicitly specified:
 
-    plugin.puppet.windows_service = puppet
+```yaml
+mcollective_agent_puppet::config:
+  windows_service = puppet
+```
 
-The agent will by default invoke `plugin.puppet.command` to initiate a
+The agent will by default invoke `command` to initiate a
 run, passing through any applicable flags to adjust behavior.  On
 POSIX-compliant platforms where Puppet is already running in
 daemonized mode we support sending the daemonized service a USR1
@@ -70,14 +89,41 @@ check-in.  This will inhibit customizations to the run (such as noop
 or environment), but it is the default.  It's reccomended that you
 disable this like so:
 
-    plugin.puppet.signal_daemon = false
+
+```yaml
+mcollective_agent_puppet::config:
+  signal_daemon = false
+```
 
 The agent will not by default accept the server option. If passed then
 the agent returns an error. Passing the option can be allowed in the
 configuration file like so:
 
-     plugin.puppet.allow_server_override = true
+```yaml
+mcollective_agent_puppet::config:
+  allow_server_override = true
+```
 
+## Authorization
+
+By default the Action Policy system is configured to only allow `status` and `last_run_summary`
+actions from all users.  These are read only and does not expose secrets.
+
+Follow the Choria documentation to configure your own policies either site wide or per agent.
+
+If you do configure any Policies specific to this module these defaults will be overriden
+when done using Hiera.
+
+An example policy can be seen here:
+
+```yaml
+mcollective_agent_puppet::policies:
+  - action: "allow"
+    callers: "choria=manager.mcollective"
+    actions: "disable enable"
+    facts: "*"
+    classes: "*"
+```
 
 ## Usage
 ### Running Puppet
@@ -313,13 +359,24 @@ The use case would be that you want:
 You can control the service agent with the following policy using the *service.policy*
 file:
 
-    allow    cert=joe stop  puppet().enabled=false
+```yaml
+mcollective_agent_puppet::policies:
+  - action: "allow"
+    callers: "choria=user.mcollective"
+    facts: "puppet().enabled=false"
+```
 
 And you can then allow the manager user to disable and enable nodes using the
 *puppet.policy* file:
 
-    allow   cert=manager disable * *
-    allow   cert=manager enable  * *
+```yaml
+mcollective_agent_puppet::policies:
+  - action: "allow"
+    callers: "choria=manager.mcollective"
+    actions: "disable enable"
+    facts: "*"
+    classes: "*"
+```
 
 Together this allows you to ensure that you both have a maintenance window and a
 period where Puppet will not start services again without your knowledge
@@ -379,19 +436,28 @@ By default if not specifically configured this feature is not usable as it defau
 to the following configuration:
 
 
-    plugin.puppet.resource_allow_managed_resources = true
-    plugin.puppet.resource_type_whitelist = none
+```yaml
+mcollective_agent_puppet::config:
+  resource_allow_managed_resources = true
+  resource_type_whitelist = none
+```
 
 You can allow all types except the exec, service and package types using the
 following config line:
 
-    plugin.puppet.resource_type_blacklist = exec,service,package
+```yaml
+mcollective_agent_puppet::config:
+  resource_type_blacklist = exec,service,package
+```
 
 You can say which resource names are allowed or denied. You define whitelist or blacklist
-for resource type by adding resource type after plugin.puppet.resource_name_whitelist or
-plugin.puppet.resource_name_blacklist, for example:
+for resource type by adding resource type after `resource_name_whitelist` or
+`resource_name_blacklist`, for example:
 
-	plugin.puppet.resource_name_blacklist.package = ssh
+```yaml
+mcollective_agent_puppet::config:
+  resource_name_blacklist.package = ssh
+```
 
 If you not defined list for resource type, all names are allowed.
 
