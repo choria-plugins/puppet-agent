@@ -1,9 +1,9 @@
 metadata    :name        => "puppet_tags",
             :description => "Validates that a comma seperated list of tags are valid Puppet class names",
             :author      => "R.I.Pienaar <rip@devco.net>",
-            :license     => "ASL 2.0",
-            :version     => "1.0",
-            :url         => "http://devco.net/",
+            :license     => "Apache-2.0",
+            :version     => "1.13.2",
+            :url         => "https://github.com/choria-plugins/puppet-agent",
             :timeout     => 1
 
 usage <<-EOU

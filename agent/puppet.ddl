@@ -1,9 +1,9 @@
-metadata :name => "puppet",
+metadata :name        => "puppet",
          :description => "Run Puppet agent, get its status, and enable/disable it",
-         :author => "R.I.Pienaar <rip@devco.net>",
-         :license => "ASL2.0",
-         :version => "1.13.2",
-         :url => "https://github.com/puppetlabs/mcollective-puppet-agent",
+         :author      => "R.I.Pienaar <rip@devco.net>",
+         :license     => "Apache-2.0",
+         :version     => "1.13.2",
+         :url         => "https://github.com/choria-plugins/puppet-agent",
          :timeout => 20
 
 requires :mcollective => "2.2.1"

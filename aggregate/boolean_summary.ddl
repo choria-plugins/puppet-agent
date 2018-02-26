@@ -1,9 +1,9 @@
-metadata :name => "boolean_summary",
+metadata :name        => "boolean_summary",
          :description => "Aggregate function that will transform true/false values into predefined strings.",
-         :author => "P. Loubser <pieter.loubser@puppetlabs.com>",
-         :license => "ASL 2.0",
-         :version => "1.0",
-         :url => "http://projects.puppetlabs.com/projects/mcollective-plugins/wiki",
+         :author      => "R.I.Pienaar <rip@devco.net>",
+         :license     => "Apache-2.0",
+         :version     => "1.13.2",
+         :url         => "https://github.com/choria-plugins/puppet-agent",
          :timeout => 1
 
 usage <<-EOU
