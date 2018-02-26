@@ -1,10 +1,6 @@
-# MCollective Puppet Agent
+# Choria Puppet Agent
 
-This agent manages the *puppet agent*, unlike the older *puppetd* plugin
-this one supports Puppet 3 and recent changes made to its locking and status files.
-
-In addition to basic support for Puppet 3 and 4 this adds a number of new features, most
-them usable under Puppet 2.7 and later.
+This agent manages the *puppet agent* life cycle.
 
   * Supports noop runs or no-noop runs
   * Supports limiting runs to certain tags
@@ -16,18 +12,9 @@ them usable under Puppet 2.7 and later.
   * Use the new validation plugins to provider richer input validation and better errors
   * Data sources for the current puppet agent status and the status of the most recent run
 
-To use this agent you need:
-
-  * MCollective 2.2.0 at least
-  * Puppet 2.7 or later
-
-# TODO
-
-  * Add a new puppet commander
-
 ## Agent Installation
 
-Follow the basic [plugin install guide](http://docs.puppetlabs.com/mcollective/deploy/plugins.html)
+This agent is installed by default as part of the [Choria Orchestrator](https://choria.io)
 
 ## Configuring the agent
 
