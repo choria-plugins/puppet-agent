@@ -1,0 +1,6 @@
+mcollective_agent_puppet::policies:
+  - action: "allow"
+    callers: "*"
+    actions: "last_run_summary status"
+    facts: "*"
+    classes: "*"
