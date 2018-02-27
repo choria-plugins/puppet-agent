@@ -18,7 +18,9 @@ Additionally a number of Playbooks are included:
   * `mcollective_agent_puppet::disable_and_wait` Disables the Puppet Agent and wait for in-progress catalog runs to complete
   * `mcollective_agent_puppet::enable` Enables the Puppet Agent
 
-You can use these from other [Choria Playbooks](https://choria.io/docs/playbooks/) or on the CLI,
+You can use these from other [Choria Playbooks](https://choria.io/docs/playbooks/) or on the CLI
+
+<!--- actions -->
 
 ## Agent Installation
 
