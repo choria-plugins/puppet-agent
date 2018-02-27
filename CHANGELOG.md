@@ -6,9 +6,9 @@ Change history for `choria/mcollective_agent_puppet`
 
 Released 2018-02-26
 
- * Update documentation to be of use to Choria users (#7)
- * Add `disable`, `enable` and `disable_and_wait` Playbooks (#4)
- * Add default Action Policies allowing read-only actions to be used by anyone (#3)
+ * Update documentation to be of use to Choria users (7)
+ * Add `enable`, `disable` and `disable_and_wait` Playbooks (4)
+ * Add default Action Policies allowing read-only actions to be used by anyone (3)
  * Initial release as part of the Choria Project
 
 ## 1.13.2
