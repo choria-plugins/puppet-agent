@@ -33,7 +33,7 @@ task :readme_expand do
     if line =~ /^<\!--- actions -->/
       [
         "## Actions\n\n",
-        "This agent provides the following actions, for details about each please run `mco plugin doc agent/filemgr`\n\n" % ddl.meta[:name]
+        "This agent provides the following actions, for details about each please run `mco plugin doc agent/%s`\n\n" % ddl.meta[:name]
       ] + ddl.entities.keys.sort.map do |action|
         " * **%s** - %s\n" % [action, ddl.entities[action][:description]]
       end
