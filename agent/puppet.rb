@@ -42,23 +42,20 @@ module MCollective
             1
           end
         else
-          # On Unices double fork and exec to run puppet in a disowned child
-          child = fork {
-            # If relying on Puppet on PATH, ensure the default AIO path is included.
-            # On Windows, the MSI adds Puppet to the PATH.
-            if command.start_with?("puppet ")
-              ENV["PATH"] += ":/opt/puppetlabs/bin"
-            end
+          env = ENV.clone
 
-            grandchild = fork {
-              exec command
-            }
-            if grandchild != nil
-              ::Process.detach(grandchild)
-            end
-          }
-          return 1 if child.nil?
+          # on windows the PATH is correctly setup by puppet-agent, on unix its a mess
+          # since they use shell rc files so just does not work for non users
+          if command.start_with?("puppet ")
+            env["PATH"] = [env["PATH"], "/opt/puppetlabs/bin"].join(File::PATH_SEPARATOR)
+          end
+
+          child = ::Process.spawn(env, command, :out => "/dev/null", :err => "/dev/null", :pgroup => 0)
+
+          return 1 unless child
+
           ::Process.detach(child)
+
           return 0
         end
       end
