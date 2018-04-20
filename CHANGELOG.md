@@ -2,6 +2,12 @@
 
 Change history for `choria/mcollective_agent_puppet`
 
+## 2.0.2
+
+Released 2018-04-20
+
+ * Use `Process.spawn()` on Unix systems (13)
+
 ## 2.0.1
 
 Released 2018-04-20
