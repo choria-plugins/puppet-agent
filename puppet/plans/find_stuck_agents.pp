@@ -10,7 +10,7 @@
 # @param nodes [Choria::Nodes] The nodes to limit the search on, else with the Puppet agent
 # @param maxage [Integer] Maximum amount of time between now and last completed run
 # @returns [Choria::Nodes] list of stuck nodes
-plan mcollective_agent_puppet::stuck_agents (
+plan mcollective_agent_puppet::find_stuck_agents (
   Choria::Nodes $nodes = [],
   Integer $maxage = 7200,
 ) {
