@@ -27,6 +27,14 @@ action "resource", :description => "Evaluate Puppet RAL resources" do
           :optional    => false,
           :maxlength   => 50
 
+    input :environment,
+          :prompt      => "Environment",
+          :description => "Which Puppet environment to use",
+          :type        => :string,
+          :validation  => :puppet_variable,
+          :optional    => true,
+          :maxlength   => 50
+
     output :result,
            :description => "The result from the Puppet resource",
            :display_as  => "Result",
