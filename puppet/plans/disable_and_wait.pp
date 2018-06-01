@@ -14,7 +14,7 @@ plan mcollective_agent_puppet::disable_and_wait (
   Integer $sleep = 20,
   Optional[String] $message = undef
 ) {
-  $_nodes = choria::run_playbook("mcollective_agent_puppet::discover", "nodes" => $nodes),
+  $_nodes = choria::run_playbook("mcollective_agent_puppet::discover", "nodes" => $nodes)
 
   choria::run_playbook("mcollective_agent_puppet::disable",
     "message" => $message,
