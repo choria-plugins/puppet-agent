@@ -56,6 +56,8 @@ module Puppet
   end
   class Resource;end
   class Resource::Catalog;end
+  class Node;end
+  class Node::Environment;end
 
   def self.[](what)
     what.to_s

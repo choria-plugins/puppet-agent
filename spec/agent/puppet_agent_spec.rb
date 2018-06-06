@@ -70,6 +70,7 @@ describe "puppet agent" do
 
       Puppet::Type.stubs(:type).returns(@type)
       Puppet::Util::Log.stubs(:newdestination)
+      Puppet::Node::Environment.stubs(:remote)
       Puppet::Resource::Catalog.stubs(:new).returns(@catalog)
       Puppet::Transaction::Report.stubs(:new).returns(@report)
 
