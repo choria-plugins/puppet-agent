@@ -2,6 +2,12 @@
 
 Change history for `choria/mcollective_agent_puppet`
 
+## 2.3.1
+
+Released 2018-11-04
+
+ * Improve resource management feature under the Choria Server (#32)
+
 ## 2.3.0
 
 Released 2018-10-13
