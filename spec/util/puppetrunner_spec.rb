@@ -120,38 +120,30 @@ module MCollective::Util
     end
 
     describe "#find_enabled_nodes" do
-      it "should discover only enabled nodes" do
-        @runner.stubs(:log)
-        @runner.stubs(:sleep)
-        @runner.client.expects(:compound_filter).with("puppet().enabled=true")
-        @runner.client.expects(:discover).returns(["rspec"])
-        @runner.find_enabled_nodes.should == ["rspec"]
+      let(:data) do
+        [{
+          :data => {
+            :applying => true,
+            :lastrun => 1,
+            :enabled => true,
+            :initiated_at => 1
+          },
+          :sender => "host1.example.com"
+        },
+        {
+          :data => {
+            :applying => false,
+            :lastrun => 2,
+            :enabled => false,
+            :initiated_at => 1
+          },
+          :sender => "host2.example.com"
+        }]
       end
 
       it "should discover only enabled nodes with a compound filter" do
-        filter = MCollective::Util.empty_filter
-        filter["compound"] = [[{"statement"=>"foo"}, {"and"=>"and"}, {"not"=>"not"}, {"statement"=>"bar=baz"}]]
-        client = mock
-        client.stubs(:filter).returns(filter)
-        client.stubs(:progress=)
-        configuration = {:concurrency => 2}
-        @runner = Puppetrunner.new(client, configuration)
-        @runner.stubs(:log)
-        @runner.stubs(:sleep)
-        @runner.client.expects(:discover).returns(["rspec", "rspec2", "rspec3"])
-        @runner.find_enabled_nodes.should == ["rspec", "rspec2", "rspec3"]
-        @runner.client.filter["compound"].should == [
-                                                     [
-                                                      {"fstatement"=>{"name"=>"puppet", "operator"=>"==", "r_compare"=>"true", "params"=>nil, "value"=>"enabled"}},
-                                                      {"and"=>"and"},
-                                                      {"("=>"("},
-                                                      {"statement"=>"foo"},
-                                                      {"and"=>"and"},
-                                                      {"not"=>"not"},
-                                                      {"statement"=>"bar=baz"},
-                                                      {")"=>")"}
-                                                     ]
-                                                    ]
+        @runner.client.stubs(:status).returns(data)
+        @runner.find_enabled_nodes.should == ["host1.example.com"]
       end
     end
 
