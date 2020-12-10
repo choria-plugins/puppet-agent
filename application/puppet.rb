@@ -51,7 +51,7 @@ END_OF_USAGE
          :type        => :bool
 
   option :environment,
-         :arguments   => ["--environment ENVIRONMENT"],
+         :arguments   => ["--environment ENVIRONMENT" , "-E"],
          :description => "Place the node in a specific environment for this run",
          :type        => String
 
