@@ -550,6 +550,16 @@ describe "puppet agent" do
       result.should be_successful
     end
 
+    it "should support setting skip_tags" do
+      @manager.expects(:runonce!).with(
+        {:options_only => true,
+         :skip_tags => ["one", "two"],
+         :splay => true,
+         :splaylimit => 30}).returns([:signal_running_daemon, []])
+      result = @agent.call(:runonce, :skip_tags => "one,two")
+      result.should be_successful
+    end
+
     it "should support setting splay" do
       MCollective::PluginManager.clear
       agent = MCollective::Test::LocalAgentTest.new(
