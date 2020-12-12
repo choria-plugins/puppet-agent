@@ -318,9 +318,10 @@ module MCollective::Util
         @runner.configuration[:splay] = true
         @runner.configuration[:splaylimit] = 60
         @runner.configuration[:tag] = ["one", "two"]
+        @runner.configuration[:skip_tag] = ["three", "four"]
         @runner.configuration[:ignoreschedules] = true
 
-        @runner.runonce_arguments.should == {:splaylimit=>60, :force=>true, :environment=>"rspec", :noop=>true, :server=>"rspec:123", :tags=>"one,two", :splay=>true, :ignoreschedules=>true}
+        @runner.runonce_arguments.should == {:splaylimit=>60, :force=>true, :environment=>"rspec", :noop=>true, :server=>"rspec:123", :tags=>"one,two", :skip_tags=>"three,four", :splay=>true, :ignoreschedules=>true}
       end
     end
 

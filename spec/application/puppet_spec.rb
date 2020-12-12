@@ -186,10 +186,11 @@ module MCollective
           @app.configuration[:splay] = true
           @app.configuration[:splaylimit] = 60
           @app.configuration[:tag] = ["one", "two"]
+          @app.configuration[:skip_tag] = ["three", "four"]
           @app.configuration[:use_cached_catalog] = false
           @app.configuration[:ignoreschedules] = true
 
-          @app.runonce_arguments.should == {:splaylimit=>60, :force=>true, :environment=>"rspec", :noop=>true, :server=>"rspec:123", :tags=>"one,two", :splay=>true, :use_cached_catalog=>false, :ignoreschedules=>true}
+          @app.runonce_arguments.should == {:splaylimit=>60, :force=>true, :environment=>"rspec", :noop=>true, :server=>"rspec:123", :tags=>"one,two", :skip_tags=>"three,four", :splay=>true, :use_cached_catalog=>false, :ignoreschedules=>true}
         end
       end
 
@@ -264,6 +265,7 @@ module MCollective
           @app.configuration[:splay] = true
           @app.configuration[:splaylimit] = 60
           @app.configuration[:tag] = ["one", "two"]
+          @app.configuration[:skip_tag] = ["three", "four"]
           @app.configuration[:use_cached_catalog] = false
           @app.configuration[:ignoreschedules] = true
 
@@ -275,7 +277,8 @@ module MCollective
                                              :splaylimit => 60,
                                              :use_cached_catalog => false,
                                              :ignoreschedules => true,
-                                             :tags => "one,two").returns("result")
+                                             :tags => "one,two",
+                                             :skip_tags => "three,four").returns("result")
           @app.expects(:halt)
           @app.runonce_command
         end

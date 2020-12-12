@@ -327,18 +327,26 @@ module MCollective::Util
         end
 
         it "should fail when a daemon is idling " \
-           "and tags, environment or noop is specified" do
+           "and tags, skip_tags, environment or noop is specified" do
 
           @manager.stubs(:idling?).returns(true)
           @manager.stubs(:applying?).returns(false)
           @manager.stubs(:disabled?).returns(false)
 
           expect {
-            @manager.runonce!(:noop => true)
+            @manager.runonce!(:tags => ["one", "two"])
+          }.to raise_error("Cannot specify any custom puppet options " \
+                           "when the daemon is running")
+          expect {
+            @manager.runonce!(:skip_tags => ["three", "four"])
           }.to raise_error("Cannot specify any custom puppet options " \
                            "when the daemon is running")
           expect {
             @manager.runonce!(:environment => "production")
+          }.to raise_error("Cannot specify any custom puppet options " \
+                           "when the daemon is running")
+          expect {
+            @manager.runonce!(:noop => true)
           }.to raise_error("Cannot specify any custom puppet options " \
                            "when the daemon is running")
         end
@@ -469,10 +477,10 @@ module MCollective::Util
 
         it "should test the host and port" do
           expect {
-            @manager.create_common_puppet_cli(nil, nil, nil, "foo bar")
+            @manager.create_common_puppet_cli(nil, nil, nil, nil, "foo bar")
           }.to raise_error(/The hostname/)
           expect {
-            @manager.create_common_puppet_cli(nil, nil, nil, "foo:bar")
+            @manager.create_common_puppet_cli(nil, nil, nil, nil, "foo:bar")
           }.to raise_error(/The port/)
 
           servers_and_parameters = \
@@ -485,7 +493,7 @@ module MCollective::Util
 
           servers_and_parameters.map do |server, parameters|
             @manager.create_common_puppet_cli(
-              nil, nil, nil, server).should == parameters
+              nil, nil, nil, nil, server).should == parameters
           end
         end
 
@@ -502,14 +510,21 @@ module MCollective::Util
             nil, ["one", "two"]).should == ["--tags one,two"]
         end
 
+        it "should support skip_tags" do
+          @manager.create_common_puppet_cli(
+            nil, nil, ["one"]).should == ["--skip_tags one"]
+          @manager.create_common_puppet_cli(
+            nil, nil, ["one", "two"]).should == ["--skip_tags one,two"]
+        end
+
         it "should support environment" do
           @manager.create_common_puppet_cli(
-            nil, nil, "production").should == ["--environment production"]
+            nil, nil, nil, "production").should == ["--environment production"]
         end
 
         it "should sanity check environment" do
           expect {
-            @manager.create_common_puppet_cli(nil, nil, "prod uction")
+            @manager.create_common_puppet_cli(nil, nil, nil, "prod uction")
           }.to raise_error("Invalid environment 'prod uction' specified")
         end
 
@@ -522,21 +537,30 @@ module MCollective::Util
           }.to raise_error("Invalid tag 'tw o' specified")
         end
 
+        it "should sanity check skip_tags" do
+          expect {
+            @manager.create_common_puppet_cli(nil, nil, ["one", "tw o"])
+          }.to raise_error("Invalid skip_tag 'tw o' specified")
+          expect {
+            @manager.create_common_puppet_cli(nil, nil, ["one::two", "tw o"])
+          }.to raise_error("Invalid skip_tag 'tw o' specified")
+        end
+
         it "should support splay" do
-          @manager.create_common_puppet_cli(nil, nil, nil, nil, true).should \
+          @manager.create_common_puppet_cli(nil, nil, nil, nil, nil, true).should \
             == ["--splay"]
-          @manager.create_common_puppet_cli(nil, nil, nil, nil, false).should \
+          @manager.create_common_puppet_cli(nil, nil, nil, nil, nil, false).should \
             == ["--no-splay"]
         end
 
         it "should support splaylimit" do
           @manager.create_common_puppet_cli(
-            nil, nil, nil, nil, true, 10).should == ["--splay", "--splaylimit 10"]
+            nil, nil, nil, nil, nil, true, 10).should == ["--splay", "--splaylimit 10"]
         end
 
         it "should support ignoreschedules" do
           @manager.create_common_puppet_cli(
-            nil, nil, nil, nil, nil, nil, true).should == ["--ignoreschedules"]
+            nil, nil, nil, nil, nil, nil, nil, true).should == ["--ignoreschedules"]
         end
       end
 
@@ -878,10 +902,10 @@ module MCollective::Util
 
         it "should test the host and port" do
           expect {
-            @manager.create_common_puppet_cli(nil, nil, nil, "foo bar")
+            @manager.create_common_puppet_cli(nil, nil, nil, nil, "foo bar")
           }.to raise_error(/The hostname/)
           expect {
-            @manager.create_common_puppet_cli(nil, nil, nil, "foo:bar")
+            @manager.create_common_puppet_cli(nil, nil, nil, nil, "foo:bar")
           }.to raise_error(/The port/)
 
           servers_and_parameters = \
@@ -894,7 +918,7 @@ module MCollective::Util
 
           servers_and_parameters.map do |server, parameters|
             @manager.create_common_puppet_cli(
-              nil, nil, nil, server).should == parameters
+              nil, nil, nil, nil, server).should == parameters
           end
         end
 
@@ -911,14 +935,21 @@ module MCollective::Util
             nil, ["one", "two"]).should == ["--tags one,two"]
         end
 
+        it "should support skip_tags" do
+          @manager.create_common_puppet_cli(
+            nil, nil, ["one"]).should == ["--skip_tags one"]
+          @manager.create_common_puppet_cli(
+            nil, nil, ["one", "two"]).should == ["--skip_tags one,two"]
+        end
+
         it "should support environment" do
           @manager.create_common_puppet_cli(
-            nil, nil, "production").should == ["--environment production"]
+            nil, nil, nil, "production").should == ["--environment production"]
         end
 
         it "should sanity check environment" do
           expect {
-            @manager.create_common_puppet_cli(nil, nil, "prod uction")
+            @manager.create_common_puppet_cli(nil, nil, nil, "prod uction")
           }.to raise_error("Invalid environment 'prod uction' specified")
         end
 
@@ -931,21 +962,30 @@ module MCollective::Util
           }.to raise_error("Invalid tag 'tw o' specified")
         end
 
+        it "should sanity check skip_tags" do
+          expect {
+            @manager.create_common_puppet_cli(nil, nil, ["one", "tw o"])
+          }.to raise_error("Invalid skip_tag 'tw o' specified")
+          expect {
+            @manager.create_common_puppet_cli(nil, nil, ["one::two", "tw o"])
+          }.to raise_error("Invalid skip_tag 'tw o' specified")
+        end
+
         it "should support splay" do
-          @manager.create_common_puppet_cli(nil, nil, nil, nil, true).should \
+          @manager.create_common_puppet_cli(nil, nil, nil, nil, nil, true).should \
             == ["--splay"]
-          @manager.create_common_puppet_cli(nil, nil, nil, nil, false).should \
+          @manager.create_common_puppet_cli(nil, nil, nil, nil, nil, false).should \
             == ["--no-splay"]
         end
 
         it "should support splaylimit" do
           @manager.create_common_puppet_cli(
-            nil, nil, nil, nil, true, 10).should == ["--splay", "--splaylimit 10"]
+            nil, nil, nil, nil, nil, true, 10).should == ["--splay", "--splaylimit 10"]
         end
 
         it "should support ignoreschedules" do
           @manager.create_common_puppet_cli(
-            nil, nil, nil, nil, nil, nil, true).should == ["--ignoreschedules"]
+            nil, nil, nil, nil, nil, nil, nil, true).should == ["--ignoreschedules"]
         end
       end
 

@@ -276,6 +276,14 @@ action "runonce", :description => "Invoke a single Puppet run" do
           :optional    => true,
           :maxlength   => 120
 
+    input :skip_tags,
+          :prompt      => "Skip tags",
+          :description => "Exclude a comma list of tags from the Puppet run",
+          :type        => :string,
+          :validation  => :puppet_tags,
+          :optional    => true,
+          :maxlength   => 120
+
     input :noop,
           :prompt      => "No-op",
           :description => "Do a Puppet dry run",
