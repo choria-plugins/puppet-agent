@@ -1,3 +1,4 @@
+---
 mcollective_agent_puppet::policies:
   - action: "allow"
     callers: "*"
