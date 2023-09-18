@@ -2,6 +2,12 @@
 
 Change history for `choria/mcollective_agent_puppet`
 
+## 2.4.2
+
+Release 2022-09-18
+
+ * Support Puppet 8
+
 ## 2.4.1
 
 Release 2021-03-29
