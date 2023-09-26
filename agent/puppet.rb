@@ -46,7 +46,7 @@ module MCollective
             1
           end
         else
-          env = ENV.clone
+          env = ENV.to_h
 
           # on windows the PATH is correctly setup by puppet-agent, on unix its a mess
           # since they use shell rc files so just does not work for non users
