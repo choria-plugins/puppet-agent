@@ -128,7 +128,7 @@ module MCollective
       #
       # @return [Array<Hash>]
       def last_run_logs
-        return [] unless File.exists?(Puppet[:lastrunreport])
+        return [] unless File.exist?(Puppet[:lastrunreport])
 
         report = YAML.load_file(Puppet[:lastrunreport])
 
