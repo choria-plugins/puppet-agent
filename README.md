@@ -83,6 +83,13 @@ mcollective_agent_puppet::config:
   windows_service: puppet
 ```
 
+The service name can also be set using the `service` config.  The `service` setting will be used instead of `windows_service` if `service` is defined.
+
+```yaml
+mcollective_agent_puppet::config:
+  service: puppet
+```
+
 The agent will by default invoke `command` to initiate a
 run, passing through any applicable flags to adjust behavior.  On
 POSIX-compliant platforms where Puppet is already running in

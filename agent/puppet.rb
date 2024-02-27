@@ -10,7 +10,8 @@ module MCollective
         configfile = @config.pluginconf.fetch("puppet.config", nil)
 
         @puppet_command = @config.pluginconf.fetch("puppet.command", default_agent_command)
-        @puppet_service = @config.pluginconf.fetch("puppet.windows_service", "puppet")
+        @windows_service = @config.pluginconf.fetch("puppet.windows_service", "puppet")
+        @puppet_service = @config.pluginconf.fetch("puppet.service", @windows_service)
         @puppet_splaylimit = Integer(@config.pluginconf.fetch("puppet.splaylimit", 30))
         @puppet_splay = Util.str_to_bool(@config.pluginconf.fetch("puppet.splay", "true"))
         @puppet_agent = Util::PuppetAgentMgr.manager(configfile, @puppet_service)
