@@ -58,6 +58,13 @@ module MCollective
           File.exist?(Puppet[:agent_disabled_lockfile])
         end
 
+        # is the agent daemon currently running?
+        def daemon_present?
+          service = ::Puppet::Type.type(:service).new(name: @puppet_service)
+          status = service.provider.status
+          status.to_s == 'running'
+        end
+
         private
 
         def platform_applying?

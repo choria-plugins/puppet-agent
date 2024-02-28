@@ -15,15 +15,20 @@ module MCollective::Util
     end
 
     describe "#daemon_present?" do
-      it "should return false if the pidfile does not exist" do
-        File.expects(:exist?).with("pidfile").returns(false)
+      before :each do
+        @type = mock; @service = mock; @provider = mock
+        @service.stubs(:provider).returns(@provider)
+        @type.stubs(:new).returns(@service)
+        Puppet::Type.stubs(:type).returns(@type)
+      end
+
+      it "should return false if the service is not running" do
+        @provider.stubs(:status).returns(:stopped)
         @manager.daemon_present?.should == false
       end
 
-      it "should check the pid if the pidfile exist" do
-        File.expects(:exist?).with("pidfile").returns(true)
-        File.expects(:read).with("pidfile").returns(1)
-        @manager.expects(:has_process_for_pid?).with(1).returns(true)
+      it "should return true if the service is running" do
+        @provider.stubs(:status).returns(:running)
         @manager.daemon_present?.should == true
       end
     end

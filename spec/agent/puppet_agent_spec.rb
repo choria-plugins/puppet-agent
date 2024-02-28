@@ -25,9 +25,17 @@ describe "puppet agent" do
       @agent.startup_hook
     end
 
-    it "should set the service name based on the config" do
+    it "should set the windows service name based on the config" do
       MCollective::Config.instance.stubs(:pluginconf).returns(
         {"puppet.windows_service" => "not-puppet"})
+      MCollective::Util::PuppetAgentMgr.expects(:manager).with(nil, "not-puppet")
+
+      @agent.startup_hook
+    end
+
+    it "should set the service name based on the config" do
+      MCollective::Config.instance.stubs(:pluginconf).returns(
+        {"puppet.service" => "not-puppet"})
       MCollective::Util::PuppetAgentMgr.expects(:manager).with(nil, "not-puppet")
 
       @agent.startup_hook
