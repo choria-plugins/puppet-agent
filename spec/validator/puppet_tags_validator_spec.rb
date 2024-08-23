@@ -8,14 +8,14 @@ module MCollective
     describe Puppet_tagsValidator do
       it "should expect strings" do
         Validator.expects(:typecheck).with(1, :string).raises("not a string")
-        expect { Puppet_tagsValidator.validate(1) }.to raise_error("not a string")
+        lambda { Puppet_tagsValidator.validate(1) }.should raise_error("not a string")
       end
 
       it "should expect shellsafe strings" do
         Validator.expects(:typecheck).with(1, :string)
         Validator.expects(:validate).with(1, :shellsafe).raises("not shellsafe")
 
-        expect { Puppet_tagsValidator.validate(1) }.to raise_error("not shellsafe")
+        lambda { Puppet_tagsValidator.validate(1) }.should raise_error("not shellsafe")
       end
 
       it "should validate each supplied part as a valid variable" do

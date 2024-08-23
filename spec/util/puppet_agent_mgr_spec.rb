@@ -58,17 +58,17 @@ module MCollective::Util
 
         it "should fail with a friendly error for unsupported puppet versions" do
           Puppet.expects(:version).returns("0.22")
-          expect {
+          lambda {
             PuppetAgentMgr.manager(nil, nil, nil, true)
-          }.to raise_error("Cannot manage Puppet version 0")
+          }.should raise_error("Cannot manage Puppet version 0")
         end
 
         it "should fail with a friendly error " \
            "when it cannot determine the Puppet version" do
           Puppet.expects(:version).returns("x")
-          expect {
+          lambda {
             PuppetAgentMgr.manager(nil, nil, nil, true)
-          }.to raise_error("Cannot determine the Puppet major version")
+          }.should raise_error("Cannot determine the Puppet major version")
         end
       end
 
@@ -87,7 +87,7 @@ module MCollective::Util
       describe "#enable!" do
         it "should raise when it's already enabled" do
           @manager.expects(:enabled?).returns(true)
-          expect { @manager.enable! }.to raise_error("Already enabled")
+          lambda { @manager.enable! }.should raise_error("Already enabled")
         end
 
         it "should attempt to remove the lock file" do
@@ -100,7 +100,7 @@ module MCollective::Util
       describe "#disable!" do
         it "should raise when it's already disabld" do
           @manager.expects(:enabled?).returns(false)
-          expect { @manager.disable! }.to raise_error("Already disabled")
+          lambda { @manager.disable! }.should raise_error("Already disabled")
         end
 
         it "should create the lockfile with the correct path" do
@@ -235,9 +235,9 @@ module MCollective::Util
         end
 
         it "should fail on resource names it cannot parse" do
-          expect {
+          lambda {
             @manager.managing_resource?("File")
-          }.to raise_error("Invalid resource name File")
+          }.should raise_error("Invalid resource name File")
         end
       end
 
@@ -288,7 +288,7 @@ module MCollective::Util
         it "should return a default structure when no file is found" do
           Puppet.expects(:[]).with(:lastrunreport).returns("lastrunreport")
 
-          expect(@manager.last_run_logs).to eq([])
+          @manager.last_run_logs.should eq([])
         end
 
         it "should return log results if the file is found" do
@@ -297,7 +297,7 @@ module MCollective::Util
                                                 "last_run_report.yaml"))
           Puppet.expects(:[]).with(:lastrunreport).returns(yamlfile).times(2..3)
 
-          expect(@manager.last_run_logs).to eq([
+          @manager.last_run_logs.should eq([
             {"time_utc"=>1378216841, "time"=>1378216841, "level"=>"notice", "source"=>"Puppet", "msg"=>"Notice level message"},
             {"time_utc"=>1378216841, "time"=>1378216841, "level"=>"err", "source"=>"Puppet", "msg"=>"Err level message"},
             {"time_utc"=>1378216841, "time"=>1378216841, "level"=>"warning", "source"=>"Puppet", "msg"=>"Warning level message"},
@@ -321,9 +321,9 @@ module MCollective::Util
       describe "#runonce!" do
 
         it "should only accept valid option keys" do
-          expect {
+          lambda {
             @manager.runonce! :rspec => true
-          }.to raise_error("Unknown option rspec specified")
+          }.should raise_error("Unknown option rspec specified")
         end
 
         it "should fail when a daemon is idling " \
@@ -333,35 +333,35 @@ module MCollective::Util
           @manager.stubs(:applying?).returns(false)
           @manager.stubs(:disabled?).returns(false)
 
-          expect {
+          lambda {
             @manager.runonce!(:tags => ["one", "two"])
-          }.to raise_error("Cannot specify any custom puppet options " \
+          }.should raise_error("Cannot specify any custom puppet options " \
                            "when the daemon is running")
-          expect {
+          lambda {
             @manager.runonce!(:skip_tags => ["three", "four"])
-          }.to raise_error("Cannot specify any custom puppet options " \
+          }.should raise_error("Cannot specify any custom puppet options " \
                            "when the daemon is running")
-          expect {
+          lambda {
             @manager.runonce!(:environment => "production")
-          }.to raise_error("Cannot specify any custom puppet options " \
+          }.should raise_error("Cannot specify any custom puppet options " \
                            "when the daemon is running")
-          expect {
+          lambda {
             @manager.runonce!(:noop => true)
-          }.to raise_error("Cannot specify any custom puppet options " \
+          }.should raise_error("Cannot specify any custom puppet options " \
                            "when the daemon is running")
         end
 
         it "should raise when it is already applying" do
           @manager.expects(:applying?).returns(true)
-          expect {
+          lambda {
             @manager.runonce!
-          }.to raise_error(/Puppet is currently applying/)
+          }.should raise_error(/Puppet is currently applying/)
         end
 
         it "should raise when it is disabled" do
           @manager.stubs(:applying?).returns(false)
           @manager.expects(:disabled?).returns(true)
-          expect { @manager.runonce! }.to raise_error(/Puppet is disabled/)
+          lambda { @manager.runonce! }.should raise_error(/Puppet is disabled/)
         end
 
         it "should do a foreground run when requested" do
@@ -476,12 +476,12 @@ module MCollective::Util
       describe "#create_common_puppet_cli" do
 
         it "should test the host and port" do
-          expect {
+          lambda {
             @manager.create_common_puppet_cli(nil, nil, nil, nil, "foo bar")
-          }.to raise_error(/The hostname/)
-          expect {
+          }.should raise_error(/The hostname/)
+          lambda {
             @manager.create_common_puppet_cli(nil, nil, nil, nil, "foo:bar")
-          }.to raise_error(/The port/)
+          }.should raise_error(/The port/)
 
           servers_and_parameters = \
             [["foo:10", ["--server foo", "--masterport 10"]],
@@ -523,27 +523,27 @@ module MCollective::Util
         end
 
         it "should sanity check environment" do
-          expect {
+          lambda {
             @manager.create_common_puppet_cli(nil, nil, nil, "prod uction")
-          }.to raise_error("Invalid environment 'prod uction' specified")
+          }.should raise_error("Invalid environment 'prod uction' specified")
         end
 
         it "should sanity check tags" do
-          expect {
+          lambda {
             @manager.create_common_puppet_cli(nil, ["one", "tw o"])
-          }.to raise_error("Invalid tag 'tw o' specified")
-          expect {
+          }.should raise_error("Invalid tag 'tw o' specified")
+          lambda {
             @manager.create_common_puppet_cli(nil, ["one::two", "tw o"])
-          }.to raise_error("Invalid tag 'tw o' specified")
+          }.should raise_error("Invalid tag 'tw o' specified")
         end
 
         it "should sanity check skip_tags" do
-          expect {
+          lambda {
             @manager.create_common_puppet_cli(nil, nil, ["one", "tw o"])
-          }.to raise_error("Invalid skip_tag 'tw o' specified")
-          expect {
+          }.should raise_error("Invalid skip_tag 'tw o' specified")
+          lambda {
             @manager.create_common_puppet_cli(nil, nil, ["one::two", "tw o"])
-          }.to raise_error("Invalid skip_tag 'tw o' specified")
+          }.should raise_error("Invalid skip_tag 'tw o' specified")
         end
 
         it "should support splay" do
@@ -631,7 +631,7 @@ module MCollective::Util
       describe "#enable!" do
         it "should raise when it's already enabled" do
           @manager.expects(:enabled?).returns(true)
-          expect { @manager.enable! }.to raise_error("Already enabled")
+          lambda { @manager.enable! }.should raise_error("Already enabled")
         end
 
         it "should attempt to remove the lock file" do
@@ -644,7 +644,7 @@ module MCollective::Util
       describe "#disable!" do
         it "should raise when it's already disabld" do
           @manager.expects(:enabled?).returns(false)
-          expect { @manager.disable! }.to raise_error("Already disabled")
+          lambda { @manager.disable! }.should raise_error("Already disabled")
         end
 
         it "should set an empty message if none is supplied" do
@@ -800,9 +800,9 @@ module MCollective::Util
         end
 
         it "should fail on resource names it cannot parse" do
-          expect {
+          lambda {
             @manager.managing_resource?("File")
-          }.to raise_error("Invalid resource name File")
+          }.should raise_error("Invalid resource name File")
         end
       end
 
@@ -853,7 +853,7 @@ module MCollective::Util
         it "should return a default structure when no file is found" do
           Puppet.expects(:[]).with(:lastrunreport).returns("lastrunreport")
 
-          expect(@manager.last_run_logs).to eq([])
+          @manager.last_run_logs.should eq([])
         end
 
         it "should return log results if the file is found" do
@@ -862,7 +862,7 @@ module MCollective::Util
                                                 "last_run_report.yaml"))
           Puppet.expects(:[]).with(:lastrunreport).returns(yamlfile).times(2..3)
 
-          expect(@manager.last_run_logs).to eq([
+          @manager.last_run_logs.should eq([
             {"time_utc"=>1378216841, "time"=>1378216841, "level"=>"notice", "source"=>"Puppet", "msg"=>"Notice level message"},
             {"time_utc"=>1378216841, "time"=>1378216841, "level"=>"err", "source"=>"Puppet", "msg"=>"Err level message"},
             {"time_utc"=>1378216841, "time"=>1378216841, "level"=>"warning", "source"=>"Puppet", "msg"=>"Warning level message"},
@@ -901,12 +901,12 @@ module MCollective::Util
       describe "#create_common_puppet_cli" do
 
         it "should test the host and port" do
-          expect {
+          lambda {
             @manager.create_common_puppet_cli(nil, nil, nil, nil, "foo bar")
-          }.to raise_error(/The hostname/)
-          expect {
+          }.should raise_error(/The hostname/)
+          lambda {
             @manager.create_common_puppet_cli(nil, nil, nil, nil, "foo:bar")
-          }.to raise_error(/The port/)
+          }.should raise_error(/The port/)
 
           servers_and_parameters = \
             [["foo:10", ["--server foo", "--masterport 10"]],
@@ -948,27 +948,27 @@ module MCollective::Util
         end
 
         it "should sanity check environment" do
-          expect {
+          lambda {
             @manager.create_common_puppet_cli(nil, nil, nil, "prod uction")
-          }.to raise_error("Invalid environment 'prod uction' specified")
+          }.should raise_error("Invalid environment 'prod uction' specified")
         end
 
         it "should sanity check tags" do
-          expect {
+          lambda {
             @manager.create_common_puppet_cli(nil, ["one", "tw o"])
-          }.to raise_error("Invalid tag 'tw o' specified")
-          expect {
+          }.should raise_error("Invalid tag 'tw o' specified")
+          lambda {
             @manager.create_common_puppet_cli(nil, ["one::two", "tw o"])
-          }.to raise_error("Invalid tag 'tw o' specified")
+          }.should raise_error("Invalid tag 'tw o' specified")
         end
 
         it "should sanity check skip_tags" do
-          expect {
+          lambda {
             @manager.create_common_puppet_cli(nil, nil, ["one", "tw o"])
-          }.to raise_error("Invalid skip_tag 'tw o' specified")
-          expect {
+          }.should raise_error("Invalid skip_tag 'tw o' specified")
+          lambda {
             @manager.create_common_puppet_cli(nil, nil, ["one::two", "tw o"])
-          }.to raise_error("Invalid skip_tag 'tw o' specified")
+          }.should raise_error("Invalid skip_tag 'tw o' specified")
         end
 
         it "should support splay" do
@@ -992,9 +992,9 @@ module MCollective::Util
       describe "#runonce!" do
 
         it "should only accept valid option keys" do
-          expect {
+          lambda {
             @manager.runonce! :rspec => true
-          }.to raise_error("Unknown option rspec specified")
+          }.should raise_error("Unknown option rspec specified")
         end
 
         it "should fail when a daemon is idling " \
@@ -1004,27 +1004,27 @@ module MCollective::Util
           @manager.stubs(:applying?).returns(false)
           @manager.stubs(:disabled?).returns(false)
 
-          expect {
+          lambda {
             @manager.runonce!(:noop => true)
-          }.to raise_error("Cannot specify any custom puppet options " \
+          }.should raise_error("Cannot specify any custom puppet options " \
                            "when the daemon is running")
-          expect {
+          lambda {
             @manager.runonce!(:environment => "production")
-          }.to raise_error("Cannot specify any custom puppet options " \
+          }.should raise_error("Cannot specify any custom puppet options " \
                            "when the daemon is running")
         end
 
         it "should raise when it is already applying" do
           @manager.expects(:applying?).returns(true)
-          expect {
+          lambda {
             @manager.runonce!
-          }.to raise_error(/Puppet is currently applying/)
+          }.should raise_error(/Puppet is currently applying/)
         end
 
         it "should raise when it is disabled" do
           @manager.stubs(:applying?).returns(false)
           @manager.expects(:disabled?).returns(true)
-          expect { @manager.runonce! }.to raise_error(/Puppet is disabled/)
+          lambda { @manager.runonce! }.should raise_error(/Puppet is disabled/)
         end
 
         it "should do a foreground run when requested" do

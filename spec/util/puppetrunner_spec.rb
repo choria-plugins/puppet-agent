@@ -17,7 +17,7 @@ module MCollective::Util
 
     describe "#initialize" do
       it "should not allow < 1 concurrency" do
-        expect { Puppetrunner.new(mock, {}) }.to raise_error("Concurrency has to be > 0")
+        lambda { Puppetrunner.new(mock, {}) }.should raise_error("Concurrency has to be > 0")
       end
     end
 

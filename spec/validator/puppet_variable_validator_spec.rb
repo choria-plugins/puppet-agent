@@ -9,14 +9,14 @@ module MCollective
     describe Puppet_variableValidator do
       it "should expect strings" do
         Validator.expects(:typecheck).with(1, :string).raises("not a string")
-        expect { Puppet_server_addressValidator.validate(1) }.to raise_error("not a string")
+        lambda { Puppet_server_addressValidator.validate(1) }.should raise_error("not a string")
       end
 
       it "should expect shellsafe strings" do
         Validator.expects(:typecheck).with(1, :string)
         Validator.expects(:validate).with(1, :shellsafe).raises("not shellsafe")
 
-        expect { Puppet_server_addressValidator.validate(1) }.to raise_error("not shellsafe")
+        lambda { Puppet_server_addressValidator.validate(1) }.should raise_error("not shellsafe")
       end
 
       it "should correctly validate single character variables" do
@@ -25,7 +25,7 @@ module MCollective
 
         Puppet_variableValidator.validate("a")
         Puppet_variableValidator.validate("A")
-        expect { Puppet_variableValidator.validate("1") }.to raise_error("Invalid variable name '1' specified")
+        lambda { Puppet_variableValidator.validate("1") }.should raise_error("Invalid variable name '1' specified")
       end
 
       it "should correctly validate multi character variables" do
@@ -36,9 +36,9 @@ module MCollective
         Puppet_variableValidator.validate("A")
         Puppet_variableValidator.validate("1a")
         Puppet_variableValidator.validate("a1")
-        expect { Puppet_variableValidator.validate("a-b") }.to raise_error("Invalid variable name 'a-b' specified")
-        expect { Puppet_variableValidator.validate("a.b") }.to raise_error("Invalid variable name 'a.b' specified")
-        expect { Puppet_variableValidator.validate("a b") }.to raise_error("Invalid variable name 'a b' specified")
+        lambda { Puppet_variableValidator.validate("a-b") }.should raise_error("Invalid variable name 'a-b' specified")
+        lambda { Puppet_variableValidator.validate("a.b") }.should raise_error("Invalid variable name 'a.b' specified")
+        lambda { Puppet_variableValidator.validate("a b") }.should raise_error("Invalid variable name 'a b' specified")
       end
     end
   end

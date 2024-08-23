@@ -43,12 +43,12 @@ describe "puppet agent" do
 
     it "on Windows it should use puppet.bat" do
       MCollective::Util.stubs(:windows?).returns(true)
-      expect(@agent.default_agent_command).to eq("puppet.bat agent")
+      @agent.default_agent_command.should eq("puppet.bat agent")
     end
 
     it "on non-Windows it should use puppet" do
       MCollective::Util.stubs(:windows?).returns(false)
-      expect(@agent.default_agent_command).to eq("puppet agent")
+      @agent.default_agent_command.should eq("puppet agent")
     end
   end
 

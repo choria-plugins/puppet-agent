@@ -91,9 +91,9 @@ module MCollective::Util
 
     describe "#signal_running_daemon" do
       it "should not be supported" do
-        expect {
+        lambda {
           @manager.signal_running_daemon
-        }.to raise_error(
+        }.should raise_error(
               /Signalling the puppet daemon is not supported on Windows/)
       end
     end

@@ -27,7 +27,7 @@ module MCollective
       describe "#post_option_parser" do
         it "should detect unsupported commands" do
           ARGV << "rspec"
-          expect { @app.post_option_parser(@app.configuration) }.to raise_error(/Action must be/)
+          lambda { @app.post_option_parser(@app.configuration) }.should raise_error(/Action must be/)
         end
 
         it "should get the concurrency for runall" do
