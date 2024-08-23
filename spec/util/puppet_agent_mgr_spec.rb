@@ -654,7 +654,7 @@ module MCollective::Util
 
           Time.stubs(:now).returns(time)
           jsonfile = StringIO
-          jsonfile.expects(:print).with(JSON.dump(:disabled_message => msg))
+          jsonfile.expects(:write).with(JSON.dump(:disabled_message => msg))
 
           @manager.expects(:atomic_file).with("agent_disabled_lockfile").yields(
             jsonfile)
@@ -669,7 +669,7 @@ module MCollective::Util
 
           Time.stubs(:now).returns(time)
           jsonfile = StringIO
-          jsonfile.expects(:print).with(JSON.dump(:disabled_message => msg))
+          jsonfile.expects(:write).with(JSON.dump(:disabled_message => msg))
 
           @manager.expects(:atomic_file).with("agent_disabled_lockfile").yields(
             jsonfile)
