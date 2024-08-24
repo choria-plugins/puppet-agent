@@ -18,13 +18,13 @@ module MCollective::Util
       it "should return false if the service does not exist" do
         Win32::Service.expects(:status).with('pe-puppet').raises(
           Win32::Service::Error)
-        Windows.daemon_present?.should be_false
+        Windows.daemon_present?.should be_falsey
       end
 
       it "should return false if the service is stopped" do
         Win32::Service.expects(:status).with('pe-puppet').returns(
           stub(:current_state => 'stopped'))
-        Windows.daemon_present?.should be_false
+        Windows.daemon_present?.should be_falsey
       end
 
       ['running', 'continue pending', 'start pending'].each do |state|
@@ -80,12 +80,12 @@ module MCollective::Util
     describe "#background_run_allowed?" do
       it "should be true if the daemon is present" do
         @manager.stubs(:daemon_present?).returns true
-        @manager.background_run_allowed?.should be_true
+        @manager.background_run_allowed?.should be_truthy
       end
 
       it "should be true if the daemon is not present" do
         @manager.stubs(:daemon_present?).returns false
-        @manager.background_run_allowed?.should be_true
+        @manager.background_run_allowed?.should be_truthy
       end
     end
 
