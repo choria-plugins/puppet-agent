@@ -165,21 +165,21 @@ module MCollective::Util
 
       it "should return 0 when do not get a response from the remote host" do
         @runner.client.expects(:discover).with(:nodes => "rspec")
-        @runner.client.expects(:runonce).with(:force => true).returns([])
+        @runner.client.expects(:runonce).with({ :force => true }).returns([])
         @runner.client.expects(:reset)
         @runner.runhost("rspec").should == 0
       end
 
       it "should return 0 when we encounter a older version of the agent on a remote host" do
         @runner.client.expects(:discover).with(:nodes => "rspec")
-        @runner.client.expects(:runonce).with(:force => true).returns([{:data => {:summary => "rspec"}}])
+        @runner.client.expects(:runonce).with({ :force => true }).returns([{:data => {:summary => "rspec"}}])
         @runner.client.expects(:reset)
         @runner.runhost("rspec").should == 0
       end
 
       it "should return the timestamp of when it was envoked" do
         @runner.client.expects(:discover).with(:nodes => "rspec")
-        @runner.client.expects(:runonce).with(:force => true).returns([{:data => {:summary => "rspec", :initiated_at => "123"}}])
+        @runner.client.expects(:runonce).with({ :force => true }).returns([{:data => {:summary => "rspec", :initiated_at => "123"}}])
         @runner.client.expects(:reset)
         @runner.runhost("rspec").should == 123
       end

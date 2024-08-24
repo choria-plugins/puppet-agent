@@ -598,9 +598,11 @@ describe "puppet agent" do
          :splay => true,
          :splaylimit => 30}).returns([:run_in_foreground, ["--rspec"]])
       @agent.expects(:run).with("puppet agent --rspec",
-                                :stdout => :summary,
-                                :stderr => :summary,
-                                :chomp => true).returns(0)
+                                {
+                                  :stdout => :summary,
+                                  :stderr => :summary,
+                                  :chomp => true
+                                }).returns(0)
 
       result = @agent.call(:runonce)
       result.should be_successful
@@ -612,9 +614,11 @@ describe "puppet agent" do
          :splay => true,
          :splaylimit => 30}).returns([:run_in_foreground, ["--rspec"]])
       @agent.expects(:run).with("puppet agent --rspec",
-                                :stdout => :summary,
-                                :stderr => :summary,
-                                :chomp => true).returns(1)
+                                {
+                                  :stdout => :summary,
+                                  :stderr => :summary,
+                                  :chomp => true
+                                }).returns(1)
 
       result = @agent.call(:runonce)
       result.should be_aborted_error
