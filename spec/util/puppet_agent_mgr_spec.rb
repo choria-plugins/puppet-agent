@@ -2,15 +2,15 @@
 
 require 'spec_helper'
 require File.expand_path(File.join(File.dirname(__FILE__),
-                                   '../..', 'util', 'puppet_agent_mgr.rb'))
+                                   '../..', 'files', 'mcollective', 'util', 'puppet_agent_mgr.rb'))
 require File.expand_path(File.join(File.dirname(__FILE__),
-                                   '../..', 'util', 'puppet_agent_mgr',
+                                   '../..', 'files', 'mcollective', 'util', 'puppet_agent_mgr',
                                    'mgr_v2.rb'))
 require File.expand_path(File.join(File.dirname(__FILE__),
-                                   '../..', 'util', 'puppet_agent_mgr',
+                                   '../..', 'files', 'mcollective', 'util', 'puppet_agent_mgr',
                                    'mgr_v3.rb'))
 require File.expand_path(File.join(File.dirname(__FILE__),
-                                   '../..', 'util', 'puppet_agent_mgr',
+                                   '../..', 'files', 'mcollective', 'util', 'puppet_agent_mgr',
                                    'mgr_windows.rb'))
 
 

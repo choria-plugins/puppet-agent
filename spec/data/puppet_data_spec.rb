@@ -1,12 +1,12 @@
 #!/usr/bin/env rspec
 
 require 'spec_helper'
-require '%s/../../util/puppet_agent_mgr.rb' % File.dirname(__FILE__)
+require '%s/../../files/mcollective/util/puppet_agent_mgr.rb' % File.dirname(__FILE__)
 
 describe "puppet data" do
   before do
     @data_file = File.expand_path(File.join(File.dirname(__FILE__),
-                                            "../../data/puppet_data.rb"))
+                                            "../../files/mcollective/data/puppet_data.rb"))
     @data = MCollective::Test::DataTest.new("puppet_data",
                                             :data_file => @data_file).plugin
   end

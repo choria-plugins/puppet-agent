@@ -1,8 +1,8 @@
 #!/usr/bin/env rspec
 
 require 'spec_helper'
-require File.expand_path(File.join(File.dirname(__FILE__), "../../validator/puppet_variable_validator.rb"))
-require File.expand_path(File.join(File.dirname(__FILE__), "../../validator/puppet_server_address_validator.rb"))
+require File.expand_path(File.join(File.dirname(__FILE__), "../../files/mcollective/validator/puppet_variable_validator.rb"))
+require File.expand_path(File.join(File.dirname(__FILE__), "../../files/mcollective/validator/puppet_server_address_validator.rb"))
 
 module MCollective
   module Validator

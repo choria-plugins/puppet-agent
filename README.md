@@ -21,7 +21,16 @@ Additionally a number of Playbooks are included:
 
 You can use these from other [Choria Playbooks](https://choria.io/docs/playbooks/) or on the CLI
 
-<!--- actions -->
+## Actions
+
+This agent provides the following actions, for details about each please run `mco plugin doc agent/puppet`
+
+ * **disable** - Disable the Puppet agent
+ * **enable** - Enable the Puppet agent
+ * **last_run_summary** - Get the summary of the last Puppet run
+ * **resource** - Evaluate Puppet RAL resources
+ * **runonce** - Invoke a single Puppet run
+ * **status** - Get the current status of the Puppet agent
 
 ## Agent Installation
 

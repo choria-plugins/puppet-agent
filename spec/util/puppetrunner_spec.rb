@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-require File.join(File.dirname(__FILE__), File.join('../..', 'util', 'puppetrunner.rb'))
+require File.join(File.dirname(__FILE__), File.join('../..', 'files', 'mcollective', 'util', 'puppetrunner.rb'))
 
 module MCollective::Util
   describe Puppetrunner do

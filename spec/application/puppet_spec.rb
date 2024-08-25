@@ -1,12 +1,13 @@
 #!/usr/bin/env rspec
 
 require 'spec_helper'
+require_relative '../../files/mcollective/application/puppet'
 
 module MCollective
   class Application
     describe Puppet do
       before do
-        application_file = File.join(File.dirname(__FILE__), '../../', 'application', 'puppet.rb')
+        application_file = File.join(File.dirname(__FILE__), '../../',  'files', 'mcollective', 'application', 'puppet.rb')
         @app = MCollective::Test::ApplicationTest.new('puppet', :application_file => application_file).plugin
 
         client = mock
