@@ -7,6 +7,17 @@ require File.join(File.dirname(__FILE__), File.join('../..', 'util', 'puppetrunn
 module MCollective::Util
   describe Puppetrunner do
     before do
+      # Workaround for a Mocha::StubbingError:
+      # #<Mock:logger> was instantiated in one test but it is receiving
+      # invocations within another test. This can lead to unintended
+      # interactions between tests and hence unexpected test failures. Ensure
+      # that every test correctly cleans up any state that it introduces.
+      logger = mock('logger')
+      [:log, :start, :debug, :info, :warn].each do |meth|
+        logger.stubs(meth)
+      end
+      MCollective::Log.configure(logger)
+
       filter = MCollective::Util.empty_filter
       client = mock
       client.stubs(:filter).returns(filter)
@@ -17,7 +28,7 @@ module MCollective::Util
 
     describe "#initialize" do
       it "should not allow < 1 concurrency" do
-        expect { Puppetrunner.new(mock, {}) }.to raise_error("Concurrency has to be > 0")
+        lambda { Puppetrunner.new(mock, {}) }.should raise_error("Concurrency has to be > 0")
       end
     end
 
@@ -154,21 +165,21 @@ module MCollective::Util
 
       it "should return 0 when do not get a response from the remote host" do
         @runner.client.expects(:discover).with(:nodes => "rspec")
-        @runner.client.expects(:runonce).with(:force => true).returns([])
+        @runner.client.expects(:runonce).with({ :force => true }).returns([])
         @runner.client.expects(:reset)
         @runner.runhost("rspec").should == 0
       end
 
       it "should return 0 when we encounter a older version of the agent on a remote host" do
         @runner.client.expects(:discover).with(:nodes => "rspec")
-        @runner.client.expects(:runonce).with(:force => true).returns([{:data => {:summary => "rspec"}}])
+        @runner.client.expects(:runonce).with({ :force => true }).returns([{:data => {:summary => "rspec"}}])
         @runner.client.expects(:reset)
         @runner.runhost("rspec").should == 0
       end
 
       it "should return the timestamp of when it was envoked" do
         @runner.client.expects(:discover).with(:nodes => "rspec")
-        @runner.client.expects(:runonce).with(:force => true).returns([{:data => {:summary => "rspec", :initiated_at => "123"}}])
+        @runner.client.expects(:runonce).with({ :force => true }).returns([{:data => {:summary => "rspec", :initiated_at => "123"}}])
         @runner.client.expects(:reset)
         @runner.runhost("rspec").should == 123
       end

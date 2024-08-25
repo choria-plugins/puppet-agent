@@ -27,7 +27,7 @@ module MCollective
       describe "#post_option_parser" do
         it "should detect unsupported commands" do
           ARGV << "rspec"
-          expect { @app.post_option_parser(@app.configuration) }.to raise_error(/Action must be/)
+          lambda { @app.post_option_parser(@app.configuration) }.should raise_error(/Action must be/)
         end
 
         it "should get the concurrency for runall" do
@@ -246,7 +246,7 @@ module MCollective
 
         it "should support disabling with a message" do
           @app.configuration[:message] = "rspec test"
-          @app.client.expects(:disable).with(:message => "rspec test").returns("rspec")
+          @app.client.expects(:disable).with({ :message => "rspec test" }).returns("rspec")
           @app.disable_command
         end
 
@@ -269,16 +269,16 @@ module MCollective
           @app.configuration[:use_cached_catalog] = false
           @app.configuration[:ignoreschedules] = true
 
-          @app.client.expects(:runonce).with(:force => true,
-                                             :server => "rspec:123",
-                                             :noop => true,
-                                             :environment => "rspec",
-                                             :splay => true,
-                                             :splaylimit => 60,
-                                             :use_cached_catalog => false,
-                                             :ignoreschedules => true,
-                                             :tags => "one,two",
-                                             :skip_tags => "three,four").returns("result")
+          @app.client.expects(:runonce).with({:force => true,
+                                              :server => "rspec:123",
+                                              :noop => true,
+                                              :environment => "rspec",
+                                              :splay => true,
+                                              :splaylimit => 60,
+                                              :use_cached_catalog => false,
+                                              :ignoreschedules => true,
+                                              :tags => "one,two",
+                                              :skip_tags => "three,four"}).returns("result")
           @app.expects(:halt)
           @app.runonce_command
         end

@@ -2,9 +2,9 @@
 source "https://rubygems.org"
 
 group :test do
-  gem "rake", ">= 12.3.2"
-  gem "rspec", "~> 2.11.0"
-  gem "mocha", "~> 0.10.0"
+  gem "rake"
+  gem "rspec"
+  gem "mocha"
   gem "mcollective-test"
 end
 

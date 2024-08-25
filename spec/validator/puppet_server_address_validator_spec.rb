@@ -9,17 +9,17 @@ module MCollective
 
       it "should expect strings" do
         Validator.expects(:typecheck).with(1, :string).raises("not a string")
-        expect {
+        lambda {
           Puppet_server_addressValidator.validate(1)
-        }.to raise_error("not a string")
+        }.should raise_error("not a string")
       end
 
       it "should expect shellsafe strings" do
         Validator.expects(:typecheck).with(1, :string)
         Validator.expects(:validate).with(1, :shellsafe).raises("not shellsafe")
-        expect {
+        lambda {
           Puppet_server_addressValidator.validate(1)
-        }.to raise_error("not shellsafe")
+        }.should raise_error("not shellsafe")
       end
 
       def validate_servers (good_servers, bad_servers)
@@ -29,9 +29,9 @@ module MCollective
           Puppet_server_addressValidator.validate(server)
         end
         bad_servers.each do |server|
-          expect {
+          lambda {
             Puppet_server_addressValidator.validate(server)
-          }.to raise_error("The hostname '%s' is not a valid hostname" % server)
+          }.should raise_error("The hostname '%s' is not a valid hostname" % server)
         end
       end
 
@@ -65,9 +65,9 @@ module MCollective
           Puppet_server_addressValidator.validate(server)
         end
         bad_servers_ports.each do |server, port|
-          expect {
+          lambda {
             Puppet_server_addressValidator.validate(server)
-          }.to raise_error("The port '%s' is not a valid puppet master port" % port)
+          }.should raise_error("The port '%s' is not a valid puppet master port" % port)
         end
       end
 

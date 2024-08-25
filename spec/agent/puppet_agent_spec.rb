@@ -43,12 +43,12 @@ describe "puppet agent" do
 
     it "on Windows it should use puppet.bat" do
       MCollective::Util.stubs(:windows?).returns(true)
-      expect(@agent.default_agent_command).to eq("puppet.bat agent")
+      @agent.default_agent_command.should eq("puppet.bat agent")
     end
 
     it "on non-Windows it should use puppet" do
       MCollective::Util.stubs(:windows?).returns(false)
-      expect(@agent.default_agent_command).to eq("puppet agent")
+      @agent.default_agent_command.should eq("puppet agent")
     end
   end
 
@@ -598,9 +598,11 @@ describe "puppet agent" do
          :splay => true,
          :splaylimit => 30}).returns([:run_in_foreground, ["--rspec"]])
       @agent.expects(:run).with("puppet agent --rspec",
-                                :stdout => :summary,
-                                :stderr => :summary,
-                                :chomp => true).returns(0)
+                                {
+                                  :stdout => :summary,
+                                  :stderr => :summary,
+                                  :chomp => true
+                                }).returns(0)
 
       result = @agent.call(:runonce)
       result.should be_successful
@@ -612,9 +614,11 @@ describe "puppet agent" do
          :splay => true,
          :splaylimit => 30}).returns([:run_in_foreground, ["--rspec"]])
       @agent.expects(:run).with("puppet agent --rspec",
-                                :stdout => :summary,
-                                :stderr => :summary,
-                                :chomp => true).returns(1)
+                                {
+                                  :stdout => :summary,
+                                  :stderr => :summary,
+                                  :chomp => true
+                                }).returns(1)
 
       result = @agent.call(:runonce)
       result.should be_aborted_error

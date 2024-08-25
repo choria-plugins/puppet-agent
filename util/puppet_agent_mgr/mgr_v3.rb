@@ -38,7 +38,7 @@ module MCollective
           raise "Already disabled" unless enabled?
           msg ||= "Disabled using the Ruby API at %s" % Time.now.strftime("%c")
           atomic_file(Puppet[:agent_disabled_lockfile]) do |f|
-            f.print(JSON.dump(:disabled_message => msg))
+            f.write(JSON.dump(:disabled_message => msg))
           end
           msg
         end
