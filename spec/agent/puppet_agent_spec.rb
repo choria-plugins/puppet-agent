@@ -1,7 +1,7 @@
 #!/usr/bin/env rspec
 
 require 'spec_helper'
-require '%s/../../util/puppet_agent_mgr.rb' % File.dirname(__FILE__)
+require '%s/../../files/mcollective/util/puppet_agent_mgr.rb' % File.dirname(__FILE__)
 
 describe "puppet agent" do
 
@@ -12,7 +12,7 @@ describe "puppet agent" do
       Puppet.stubs(:version).returns('2.7.12')
       @manager = MCollective::Util::PuppetAgentMgr.manager(nil, nil, nil, true)
 
-      @agent_file = File.join(File.dirname(__FILE__), "../../agent/puppet.rb")
+      @agent_file = File.join(File.dirname(__FILE__), "../../files/mcollective/agent/puppet.rb")
       @agent = MCollective::Test::LocalAgentTest.new("puppet",
                                              :agent_file => @agent_file).plugin
     end
@@ -36,7 +36,7 @@ describe "puppet agent" do
 
   describe "#default_agent_command" do
     before do
-      @agent_file = File.join(File.dirname(__FILE__), "../../agent/puppet.rb")
+      @agent_file = File.join(File.dirname(__FILE__), "../../files/mcollective/agent/puppet.rb")
       @agent = MCollective::Test::LocalAgentTest.new("puppet",
                                              :agent_file => @agent_file).plugin
     end
@@ -59,7 +59,7 @@ describe "puppet agent" do
       Puppet.stubs(:version).returns('2.7.12')
       @manager = MCollective::Util::PuppetAgentMgr.manager(nil, nil, nil, true)
 
-      @agent_file = File.join(File.dirname(__FILE__), "../../agent/puppet.rb")
+      @agent_file = File.join(File.dirname(__FILE__), "../../files/mcollective/agent/puppet.rb")
       @agent = MCollective::Test::LocalAgentTest.new("puppet",
                                              :agent_file => @agent_file).plugin
     end
@@ -220,7 +220,7 @@ describe "puppet agent" do
       Puppet.stubs(:version).returns('2.7.12')
       @manager = MCollective::Util::PuppetAgentMgr.manager(nil, nil, nil, true)
 
-      @agent_file = File.join(File.dirname(__FILE__), "../../agent/puppet.rb")
+      @agent_file = File.join(File.dirname(__FILE__), "../../files/mcollective/agent/puppet.rb")
       @agent = MCollective::Test::LocalAgentTest.new("puppet",
                                              :agent_file => @agent_file).plugin
     end
@@ -276,7 +276,7 @@ describe "puppet agent" do
       Puppet.stubs(:version).returns('2.7.12')
       @manager = MCollective::Util::PuppetAgentMgr.manager(nil, nil, nil, true)
 
-      @agent_file = File.join(File.dirname(__FILE__), "../../agent/puppet.rb")
+      @agent_file = File.join(File.dirname(__FILE__), "../../files/mcollective/agent/puppet.rb")
       @agent = MCollective::Test::LocalAgentTest.new("puppet",
                                              :agent_file => @agent_file).plugin
     end
@@ -316,7 +316,7 @@ describe "puppet agent" do
       Puppet.stubs(:version).returns('2.7.12')
       @manager = MCollective::Util::PuppetAgentMgr.manager(nil, nil, nil, true)
 
-      @agent_file = File.join(File.dirname(__FILE__), "../../agent/puppet.rb")
+      @agent_file = File.join(File.dirname(__FILE__), "../../files/mcollective/agent/puppet.rb")
       @agent = MCollective::Test::LocalAgentTest.new("puppet",
                                              :agent_file => @agent_file).plugin
     end
@@ -395,7 +395,7 @@ describe "puppet agent" do
       Puppet.stubs(:version).returns('2.7.12')
       @manager = MCollective::Util::PuppetAgentMgr.manager(nil, nil, nil, true)
 
-      @agent_file = File.join(File.dirname(__FILE__), "../../agent/puppet.rb")
+      @agent_file = File.join(File.dirname(__FILE__), "../../files/mcollective/agent/puppet.rb")
       @agent = MCollective::Test::LocalAgentTest.new("puppet",
                                              :agent_file => @agent_file).plugin
     end
@@ -425,7 +425,7 @@ describe "puppet agent" do
       Puppet.stubs(:version).returns('2.7.12')
       @manager = MCollective::Util::PuppetAgentMgr.manager(nil, nil, nil, true)
 
-      @agent_file = File.join(File.dirname(__FILE__), "../../agent/puppet.rb")
+      @agent_file = File.join(File.dirname(__FILE__), "../../files/mcollective/agent/puppet.rb")
       @agent = MCollective::Test::LocalAgentTest.new("puppet",
                                              :agent_file => @agent_file,
                                              :config => {

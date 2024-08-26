@@ -130,7 +130,7 @@ module MCollective
       def last_run_logs
         return [] unless File.exist?(Puppet[:lastrunreport])
 
-        report = YAML.load_file(Puppet[:lastrunreport], permitted_classes: [Puppet::Transaction::Report, Puppet::Util::Log, Symbol, Time])
+        report = YAML.safe_load_file(Puppet[:lastrunreport], permitted_classes: [Puppet::Transaction::Report, Puppet::Util::Log, Symbol, Time])
 
         report.logs.map do |line|
           {
