@@ -2,6 +2,12 @@
 
 Change history for `choria/mcollective_agent_puppet`
 
+## 2.5.0
+
+Released 2024-08-26
+
+ * Support latest ruby and use new module layout
+
 ## 2.4.3
 
 Release 2024-02-03
