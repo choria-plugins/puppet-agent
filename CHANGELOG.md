@@ -2,6 +2,12 @@
 
 Change history for `choria/mcollective_agent_puppet`
 
+## 2.5.1
+
+Release 2026-10-03
+
+ * Support OpenVox 9
+
 ## 2.5.0
 
 Released 2024-08-26
